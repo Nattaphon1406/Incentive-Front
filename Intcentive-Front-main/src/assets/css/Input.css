@@ -1,0 +1,159 @@
+.form-group {
+    position: relative;
+    padding: 10px 0px;
+}
+
+
+.form-group input {
+    font-weight: 25px;
+    font-size: 25px;
+    padding: 10px 0;
+    display: block;
+    width: 100%;
+}
+
+
+.form-group label {
+    color: var(--input-color);
+    font-size: 16px;
+    font-weight: 100;
+    position: absolute;
+    pointer-events: none;
+    top: -22px;
+    transform: translateY(30px);
+    transition: all 0.2s ease-in-out;
+    left: 8px;
+}
+
+.form-group input:valid,
+.form-group input:disabled,
+.form-group input:focus,
+.form-group textarea:valid,
+.form-group textarea:disabled,
+.form-group textarea:focus {
+    border-bottom-color: rgb(7, 92, 175);
+    outline: none;
+}
+
+.form-group select:valid,
+.form-group select:disabled,
+.form-group select:focus {
+    outline: none;
+}
+
+.form-group input:valid+label,
+.form-group input:disabled+label,
+.form-group input:focus+label,
+.form-group textarea:valid+label,
+.form-group textarea:disabled+label,
+.form-group textarea:focus+label {
+    color: rgb(7, 92, 175);
+    font-size: 20px;
+    transform: translateY(8px);
+}
+
+.form-group select:valid+label,
+.form-group select:disabled+label,
+.form-group select:focus+label {
+    color: rgb(7, 92, 175);
+    font-size: 20px;
+    transform: translateY(8px);
+}
+
+.select-adjust {
+    font-size: 15px;
+}
+
+.form-group label {
+    color: var(--input-color);
+    font-size: 16px;
+    font-weight: 100;
+    position: absolute;
+    pointer-events: none;
+    top: -22px;
+    transform: translateY(30px);
+    transition: all 0.2s ease-in-out;
+    left: 8px;
+}
+
+
+.form-group-for-date {
+    position: relative;
+    padding: 10px 0px;
+}
+
+.form-group-for-date input {
+    font-weight: 25px;
+    font-size: 15px;
+    padding: 10px 0;
+    display: block;
+    width: 100%;
+}
+
+.form-group-for-date label {
+    color: var(--input-color);
+    font-size: 20px;
+    font-weight: 100;
+    position: absolute;
+    pointer-events: none;
+    top: -42px;
+    transform: translateY(30px);
+    transition: all 0.2s ease-in-out;
+    left: 8px;
+    color: rgb(7, 92, 175);
+}
+
+/* 
+.form-group-for-date DatePicker:valid + label,
+.form-group-for-date DatePicker:disabled+ label,
+.form-group-for-date DatePicker:focus + label, 
+.form-group-for-date textarea:valid + label,
+.form-group-for-date textarea:disabled+ label,
+.form-group-for-date textarea:focus + label{
+    color: rgb(7, 92, 175);
+    font-size: 20px;
+    transform: translateY(8px);
+} */
+
+
+.inputButton {
+    font-size: 28px;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.multiselect {
+    width: 200px;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+}
+
+#checkboxes label {
+    display: block;
+}
+
+#checkboxes label:hover {
+    background-color: #1e90ff;
+}

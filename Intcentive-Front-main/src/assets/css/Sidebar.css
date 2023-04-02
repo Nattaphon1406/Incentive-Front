@@ -1,0 +1,47 @@
+.ttt-menu-bg {
+  /**/ width: 100%;
+  height: 100%; 
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;/* 
+   background-attachment: fixed;  */
+}
+.logo-ttt-bg {
+  background-color: rgb(7, 92, 175);
+}
+
+.logo-ttt {
+  width: 95%;
+}
+.set-bg {
+  background-color: #282e51;
+}
+
+.sub2-menu {
+  background-color: #171a2a;
+}
+.spacing{
+ padding-left: 25px;
+}
+.botton-img {
+  position: absolute;
+  
+  left: 0;
+  bottom: 0;
+}
+.logo-sidebar-head{
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: list-item;
+}
+.black-space{
+  width: 100%;
+  height: 111.44px;
+
+}
+.sidebar-font{
+font-weight: bold;
+}
+/* .main-sidebar{
+  width: 260px;
+} */

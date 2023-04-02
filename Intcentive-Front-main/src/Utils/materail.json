@@ -1,0 +1,187 @@
+[
+    {
+        "materail": {
+            "Mat_no":"1",
+            "Mat_Code": "112022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "S20C",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "53.5",
+            "wt_pc": "0.1925",
+            "mat_kg": "32.00",
+            "cos_pc": "6.16",
+            "Mat_Supp": "JRU",
+            "sell_prc": "80.00 ",
+            "Remark": ""
+        }
+    },
+    {
+        "materail": {
+            "Mat_no":"2",
+            "Mat_Code": "112022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "S20C",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "42.0",
+            "wt_pc": "0.1547",
+            "mat_kg": "32.00",
+            "cos_pc": "4.95",
+            "Mat_Supp": "JRU",
+            "sell_prc": "68.00",
+            "Remark": ""
+        }
+    }
+    ,
+    {
+        "materail": {
+            "Mat_no":"3",
+            "Mat_Code": "111022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "SS400",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "44.0",
+            "wt_pc": "0.1613",
+            "mat_kg": "45.00",
+            "cos_pc": "7.26",
+            "Mat_Supp": "APL",
+            "sell_prc": "52.00",
+            "Remark": ""
+        }
+    }, {
+        "materail": {
+            "Mat_no":"4",
+            "Mat_Code": "112022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "S20C",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "53.5",
+            "wt_pc": "0.1925",
+            "mat_kg": "32.00",
+            "cos_pc": "6.16",
+            "Mat_Supp": "JRU",
+            "sell_prc": "80.00 ",
+            "Remark": ""
+        }
+    },
+    {
+        "materail": {
+            "Mat_no":"5",
+            "Mat_Code": "112022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "S20C",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "42.0",
+            "wt_pc": "0.1547",
+            "mat_kg": "32.00",
+            "cos_pc": "4.95",
+            "Mat_Supp": "JRU",
+            "sell_prc": "68.00",
+            "Remark": ""
+        }
+    }
+    ,
+    {
+        "materail": {
+            "Mat_no":"6",
+            "Mat_Code": "111022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "SS400",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "44.0",
+            "wt_pc": "0.1613",
+            "mat_kg": "45.00",
+            "cos_pc": "7.26",
+            "Mat_Supp": "APL",
+            "sell_prc": "52.00",
+            "Remark": ""
+        }
+    }
+    ,
+    {
+        "materail": {
+            "Mat_no":"7",
+            "Mat_Code": "111022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "SS400",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "44.0",
+            "wt_pc": "0.1613",
+            "mat_kg": "45.00",
+            "cos_pc": "7.26",
+            "Mat_Supp": "APL",
+            "sell_prc": "52.00",
+            "Remark": ""
+        }
+    }
+    ,
+    {
+        "materail": {
+            "Mat_no":"8",
+            "Mat_Code": "111022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "SS400",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "44.0",
+            "wt_pc": "0.1613",
+            "mat_kg": "45.00",
+            "cos_pc": "7.26",
+            "Mat_Supp": "APL",
+            "sell_prc": "52.00",
+            "Remark": ""
+        }
+    }
+    ,
+    {
+        "materail": {
+            "Mat_no":"9",
+            "Mat_Code": "111022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "SS400",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "44.0",
+            "wt_pc": "0.1613",
+            "mat_kg": "45.00",
+            "cos_pc": "7.26",
+            "Mat_Supp": "APL",
+            "sell_prc": "52.00",
+            "Remark": ""
+        }
+    }
+    ,
+    {
+        "materail": {
+            "Mat_no":"0",
+            "Mat_Code": "111022000",
+            "Mat_Type": "S Bar",
+            "unit_by": "Weight",
+            "Spec": "SS400",
+            "Mat_Size": "H-22",
+            "wt_/_mtr": "3.291",
+            "C_Leng": "44.0",
+            "wt_pc": "0.1613",
+            "mat_kg": "45.00",
+            "cos_pc": "7.26",
+            "Mat_Supp": "APL",
+            "sell_prc": "52.00",
+            "Remark": ""
+        }
+    }
+]

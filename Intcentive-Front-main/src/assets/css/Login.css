@@ -1,0 +1,79 @@
+
+
+body{
+  /* background-color: rgb(0, 64, 142); */
+  font-family: freesiaUPC;
+  font-size: 120%;
+  margin: 0;
+
+  width: 100%;
+  height: auto;
+
+}
+
+.body-text{
+  background-color: rgba(255, 255, 255, 0.904);
+  color: rgb(0, 64, 142);;
+  border-radius: 8px;
+}
+
+
+
+.section-padding {
+  padding-top: 0;
+  padding-bottom: 2.5rem;
+}
+.fix-padding{
+  padding-top: 4rem;
+}
+
+.img-1{
+ margin: 0;
+  position: relative;
+}
+
+.img-2{
+  position: relative;
+}
+.login-box{
+  width: 430px;
+}
+.login-logo{
+  padding-top: 20px;
+  padding-right: 20px;
+  text-align: end;
+}
+
+.img-bg {
+  width: 100%;
+  height: 100%;
+ /*  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;  */
+  
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+
+  
+}
+.test{
+  height:125vh;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+  position: relative;
+  
+}
+.login{
+  text-align: center;
+}
+@media screen and (min-width: 0px) and (max-width: 200px) {
+  .img-1 { display: block;}  }
+
+@media screen and (min-width: 201px) and (max-width: 1024px) {
+  .img-1 { display: none; }   }
+

@@ -1,0 +1,22 @@
+.customre-service{
+    width: auto;
+    height: auto;
+    position: fixed;
+    z-index:1;
+    right: 5px;
+    bottom: 5px;
+}
+.cus-card-body{
+    font-size: 100%;
+}
+.ttt{
+font-weight: bold;
+}
+.cus-card-header{
+    font-size: 150%;
+}
+.img-icon{
+    margin-left: 0.7rem;
+    width: 25px;
+    height: 25px;
+}

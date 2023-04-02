@@ -1,0 +1,209 @@
+[
+    {
+        "product": {
+            "item": "1",
+            "Part_no": "20Y6222160",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11",
+            "Vol_/_year": "1,692",
+            "Avg_Y17": "-",
+            "Max_Stk": "282",
+            "Min_Stk": "212",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "4",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },
+    {
+        "product": {
+            "item": "2",
+            "Part_no": "21M6216350",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "600",
+            "Avg_Y17": "-",
+            "Max_Stk": "-",
+            "Min_Stk": "-",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "1",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },
+    {
+        "product": {
+            "item": "3",
+            "Part_no": "2036258880",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "3",
+            "Route": "Z-Z",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },
+    {
+        "product": {
+            "item": "4",
+            "Part_no": "2016282390",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "2",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },{
+        "product": {
+            "item": "5",
+            "Part_no": "20Y6222160",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11  ",
+            "Vol_/_year": "1,692",
+            "Avg_Y17": "-",
+            "Max_Stk": "282",
+            "Min_Stk": "212",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "4",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },
+    {
+        "product": {
+            "item": "6",
+            "Part_no": "21M6216350",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "600",
+            "Avg_Y17": "-",
+            "Max_Stk": "-",
+            "Min_Stk": "-",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "1",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },
+    {
+        "product": {
+            "item": "7",
+            "Part_no": "2036258880",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "3",
+            "Route": "Z-Z",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    },
+    {
+        "product": {
+            "item": "8",
+            "Part_no": "2016282390",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "2",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    }
+    ,
+    {
+        "product": {
+            "item": "9",
+            "Part_no": "2016282390",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "2",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    }
+    ,
+    {
+        "product": {
+            "item": "10",
+            "Part_no": "2016282390",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "2",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    }
+    ,
+    {
+        "product": {
+            "item": "11",
+            "Part_no": "2016282390",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "2",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    }
+    ,
+    {
+        "product": {
+            "item": "12",
+            "Part_no": "2016282390",
+            "Part_name": "ADAPTOR",
+            "Model": "PC210LC-11 PC70-8",
+            "Vol_/_year": "108",
+            "Avg_Y17": "-",
+            "Max_Stk": "18",
+            "Min_Stk": "14",
+            "Avg_Y18Q1": "-",
+            "Qty_/_unit": "2",
+            "Route": "Z-E",
+            "Rank": "C",
+            "Status1": "Active"
+        }
+    }
+]

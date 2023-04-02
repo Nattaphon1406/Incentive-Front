@@ -1,0 +1,2111 @@
+import React, { Component, useEffect, useState,useRef } from "react";
+import { MDBDataTableV5,MDBDataTable } from "mdbreact";
+import Swal from "sweetalert2";
+import "../../assets/css/Content.css";
+import "../../assets/css/Input.css";
+import Footter from "../../component/Footter";
+import Header from "../../component/Header";
+import Sidebar from "../../component/Sidebar";
+import { useParams } from "react-router";
+import axios from "axios";
+import { userdefault_img } from "../../routes/imgRoute/imgUrl";
+import Configs from "../../config";
+import NumberFormat from "react-number-format";
+import { getOem, getToken, getUser, getFeature,getAcademy } from "../../Utils/Common";
+import Resizer from "react-image-file-resizer";
+import Select from "react-select";
+import moment from "moment";
+
+function Materail_add(props) {
+  const [addRoedit, setaddRoedit] = useState(false);
+  const [supplier, setSupplier] = useState([]);
+  const [supplier_option, setSupplier_option] = useState([]);
+  const [supplier_select_data, setSupplier_select_data] = useState([]);
+  const [supplier_select, setsupplier_select] = useState({
+    id:"",
+    supplier:"",
+    buy_price:"",
+    minimum_order: "",
+    lead_time_days: "",
+    mat_cycle_time: "",
+    remark:"",
+    mode:"",
+    index:"",
+  
+  });
+  const [feature, setfeature] = useState([]);
+  
+  const [supplier_active, setsupplier_active] = useState({
+    id:"",
+    supplier:"",
+    buy_price:"",
+    lead_time_days: "",
+    mat_cycle_time: "",
+    remark:"",
+    sort:"",
+    minimum_order:"",
+  });
+  const [type, setType] = useState([]);
+  const [size, setSize] = useState([]);
+  const [spect, setSpect] = useState([]);
+  const [radio, setRadio] = useState(null);
+  const [editRoadd, setEditRoadd] = useState();
+  const { id } = useParams();
+  const [page_mode, setPage_mode] = useState([]);
+
+  const [materailData, setmaterailData] = useState({
+    no: "",
+    name: "",
+    material_type_id: "",
+    material_spec_id: "",
+    material_size_id: "",
+    buy_price: "",
+    minimum_order: "",
+    lead_time_days: "",
+    mat_cycle_time: "",
+    remark:"",
+    material_supplier_id: "",
+    material_unit_id: "6fac9f35-9749-476d-a24a-4c33061e59b7",
+    amount: 0,
+    description: "",
+    weight_piece: "",
+    minimum_lot: "",
+    minimum_order_supplier: "",
+    supplier_lead_time: "",
+    remark: "",
+    image: "",
+    image_name: "",
+    imaget_path: "",
+    oem_id: getOem(),
+    is_active: true,
+    material_grade_id: "",
+    coil_weight: ""
+  });
+  /*  const [materailDataEdit, setmaterailDataEdit] = useState(
+    {
+    id:id,
+    no: null,
+    name: null,
+    material_type_id: null,
+    material_spec_id: null,
+    material_size_id: null,
+    buy_price: null,
+    material_supplier_id: null,
+    material_unit_id: null,
+    amount: null,
+    description: null,
+    remark: null,
+    image: null,
+    image_name: null,
+    imaget_path: null,
+    oem_id: null,
+    is_active: null,
+    }
+  ); */
+
+  var config_sub = {
+    method: "get",
+    url: Configs.API_URL + "/material/getMaterialSupplier?id=" + getUser().com,
+    headers: {
+      Authorization: getToken(),
+      "X-TTT": Configs.API_TTT,
+      "Content-Type": "application/json",
+    },
+  };
+
+  var config_type = {
+    method: "get",
+    url: Configs.API_URL + "/material/getMaterialType?id=" + getUser().com,
+    headers: {
+      Authorization: getToken(),
+      "X-TTT": Configs.API_TTT,
+      "Content-Type": "application/json",
+    },
+  };
+
+  var config_spec = {
+    method: "get",
+    url: Configs.API_URL + "/material/getMaterialSpec?id=" + getUser().com,
+    headers: {
+      Authorization: getToken(),
+      "X-TTT": Configs.API_TTT,
+      "Content-Type": "application/json",
+    },
+  };
+
+  var config_size = {
+    method: "get",
+    url: Configs.API_URL + "/material/getMaterialSize?id=" + getUser().com,
+    headers: {
+      Authorization: getToken(),
+      "X-TTT": Configs.API_TTT,
+      "Content-Type": "application/json",
+    },
+  };
+  useEffect(() => {
+
+
+    axios(config_sub)
+      .then(function (response) {
+        setSupplier(response.data);
+      //console.log(response.data); 
+        const options = [];
+
+        response.data.forEach((el) => {
+          var element = {};
+          element["id_supplier"] = el.id;
+          element["label"] = el.name;
+          options.push(element);
+        });
+        setSupplier_option(options);
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios(config_type)
+      .then(function (response) {
+        setType(response.data);
+        /*  console.log(response.data); */
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios(config_spec)
+      .then(function (response) {
+        setSpect(response.data);
+        /* console.log(response.data); */
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios(config_size)
+      .then(function (response) {
+        setSize(response.data);
+        /* console.log(response.data); */
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+  useEffect(() => {
+    var feature_data = JSON.parse(getFeature()).filter((element)=>{ 
+      return (element.menu === "Raw Material");
+    })
+    setfeature(feature_data);
+    /* console.log(props.mode);  */
+    if (props.mode === "read") {
+      setPage_mode("View");
+      setaddRoedit(true);
+    } else if (props.mode === "edit") {
+      setaddRoedit(false);
+      setPage_mode("Edit");
+    } else {
+      setaddRoedit(false);
+      setPage_mode("Add");
+    }
+  }, []);
+
+
+  const resizeFile = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      400,
+      300,
+      "png",
+      100,
+      0,
+      (uri) => {
+        resolve(uri);
+           
+      },
+     // "base64"
+    );
+  });
+  function dataURLtoFile(dataurl, filename) {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], filename, {type:mime});
+}
+function isFileImage(file) {
+  const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+
+  return file && acceptedImageTypes.includes(file['type'])
+}
+  async function setproductLogo(e) {
+
+     // if (materailData.no !== "") {
+
+        const file = e.target.files[0];
+        
+        
+        const regex = /([\u0E00-\u0E7F]+)/gmu;
+        const str = file.name;
+        let m = regex.exec(str);
+         //console.log("image is :",isFileImage(file)); 
+       
+         if(m !== null || isFileImage(file) === false){
+          //console.log("ชื่อไฟล์ไม่ถูกต้อง"); 
+          Swal.fire(
+            'Error',
+            'File name or type are not correct!!!',
+            'error'
+          )
+         }else{
+          const image = await resizeFile(file);
+     
+       
+          var file_image = dataURLtoFile(image,file.name);
+          var data = new FormData();
+          data.append("Profile", file_image);
+          data.append("typeFile", materailData.no);
+  
+          var config_uploadProfile = {
+            method: "post",
+            url: Configs.API_URL + "/upload/profile",
+            headers: {
+              Authorization: getToken(),
+              "X-TTT": Configs.API_TTT,
+              "Content-Type": "application/json",
+            },
+            data: data,
+          };
+          axios(config_uploadProfile)
+            .then(function (response) {
+              if (response.data.status) {
+                /* console.log(response.data); */
+  
+                setmaterailData({
+                  ...materailData,
+                  image_name: response.data.data.orgin_name,
+                  imaget_path: response.data.data.path,
+                  image: response.data.data,
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+         }
+      
+     
+   
+  }
+
+  var config_matt = {
+    method: "get",
+    url: Configs.API_URL + "/material/findById?id=" + id,
+    headers: {
+      Authorization: getToken(),
+      "X-TTT": Configs.API_TTT,
+      "Content-Type": "application/json",
+    },
+  };
+
+  useEffect(() => {
+    if (props.mode === "read" || props.mode === "edit") {
+      //console.log(materailData);
+      axios(config_matt)
+        .then(function (response) {
+          if (
+            response.data.material_unit_id ===
+            "505a84a4-6c71-4fbf-9dbd-8c63644221f5"
+          ) {
+            setRadio(true);
+          } else {
+            setRadio(false);
+          }
+          //console.log(response.data)
+          axios(config_sub)
+          .then(function (response2) {
+            //setSupplier(response2.data);
+          console.log(response.data); 
+           
+          if(response.data.supplier_data.length < 1){
+            let name = response2.data.filter((e)=>{
+              return e.id === response.data.material_supplier_id;
+            });
+           
+              let temp = {
+                id:"",
+                supplier_id:response.data.material_supplier_id,
+                supplier:name[0].name,
+                buy_price:response.data.buy_price,
+                minimum_order:response.data.minimum_order,
+                lead_time_days:response.data.lead_time_days,
+                mat_cycle_time:response.data.mat_cycle_time,
+                remark:response.data.remark,
+                sort:1,
+                is_active:true,
+                create_date:moment(new Date())
+              }
+              response.data.supplier_data.push(temp);
+            
+     
+          }
+        let sup_active = response.data.supplier_data.filter((e)=>{
+          return e.is_active === true;
+        })
+        console.log(sup_active)
+        if(sup_active.length > 0){
+          setsupplier_active({...supplier_active,id:sup_active[0].supplier_id,
+            supplier:sup_active[0].supplier,
+            buy_price:sup_active[0].buy_price,
+            minimum_order:response.data.minimum_order_supplier,
+            lead_time_days:response.data.supplier_lead_time,
+            mat_cycle_time:response.data.mat_cycle_time,
+            remark:response.data.remark
+            
+          })
+        }
+        response.data.supplier_data.sort((a,b)=>b.sort - a.sort);
+        response.data.supplier_data.sort((a, b) => b.is_active - a.is_active);
+        setSupplier_select_data(response.data.supplier_data);
+            
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+            
+          setmaterailData({...materailData,
+            no: response.data.no || "",
+            name: response.data.name || "",
+            material_type_id: response.data.material_type_id,
+            material_spec_id: response.data.material_spec_id,
+            material_size_id: response.data.material_size_id,
+            buy_price:
+              response.data.buy_price === null
+                ? response.data.buy_price
+                : response.data.buy_price,
+            minimum_order:
+              response.data.minimum_order === null
+                ? response.data.minimum_order
+                : response.data.minimum_order,
+            lead_time_days:
+              response.data.lead_time_days === null
+                ? response.data.lead_time_days
+                : response.data.lead_time_days,
+                mat_cycle_time:
+                response.data.mat_cycle_time === null
+                  ? response.data.mat_cycle_time
+                  : response.data.mat_cycle_time,
+            remark:
+              response.data.remark === null
+                ? response.data.remark
+                : response.data.remark,
+            material_supplier_id: response.data.material_supplier_id,
+            material_unit_id: response.data.material_unit_id,
+            amount: 0,
+            weight_piece: response.data.weight_piece,
+            minimum_lot: response.data.minimum_lot,
+            minimum_order_supplier: response.data.minimum_order_supplier,
+            supplier_lead_time: response.data.supplier_lead_time,
+            description: response.data.description,
+            remark: response.data.remark,
+            image: response.data.image,
+            image_name: response.data.image_name,
+            imaget_path: response.data.imaget_path,
+            oem_id: response.data.oem_id,
+            is_active: response.data.is_active,
+            material_grade_id: response.data.material_spec_id,
+            coil_weight: response.data.coil_weight || ""
+          });
+
+          /* if (condition) {
+             setRadio();
+          } */
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }, []);
+
+  function saveOption(params) {
+    const error_list = [];
+    if(materailData.no.trim() == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Material No]."
+      }
+      error_list.push(temp_err);
+    }
+    if(materailData.name.trim() == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Material Name]."
+      }
+      error_list.push(temp_err);
+    }
+   /*  if(materailData.material_type_id == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Mat. Type]."
+      }
+      error_list.push(temp_err);
+    }
+    if(materailData.material_spec_id == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Mat. Spec]."
+      }
+      error_list.push(temp_err);
+    }
+    if(materailData.material_size_id == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Mat. Size]."
+      }
+      error_list.push(temp_err);
+    } */
+    if(materailData.weight_piece == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Weight/Piece (Kg)]."
+      }
+      error_list.push(temp_err);
+    }
+  
+    if(materailData.material_unit_id == ""){
+      let temp_err = {
+        message:"Please enter information in the fields >>> [Mat. Unit]."
+      }
+      error_list.push(temp_err);
+    }
+    if(error_list.length > 0){
+      var err_message = "";
+      for(var e =0;e< error_list.length;e++){
+        err_message += "<br/>"+error_list[e].message;
+      }
+      Swal.fire("Error", err_message, "error");
+
+    }else{
+      if (feature.feature === "Mat Grade") {
+        var check_material_id = materailData.material_grade_id
+      } else {
+        var check_material_id = materailData.material_spec_id
+      }
+      if (props.mode === "add") {
+     console.log(supplier_active)
+
+        const temp_data = {
+          no: materailData.no.trim(),
+          name: materailData.name.trim(),
+          material_type_id: materailData.material_type_id,
+          material_spec_id: check_material_id,
+          material_size_id: materailData.material_size_id,
+          buy_price:
+            supplier_active.buy_price === null
+              ? 0
+              : Number(supplier_active.buy_price.toString().replace(/,/g, "")),
+          minimum_order:
+            supplier_active.minimum_order === null
+              ? 0
+              : Number(supplier_active.minimum_order.toString().replace(/,/g, "")),
+          lead_time_days:
+            supplier_active.lead_time_days === null || supplier_active.lead_time_days === ""
+            ? 0
+            : Number(supplier_active.lead_time_days.toString().replace(/,/g, "")),
+            mat_cycle_time:
+            supplier_active.mat_cycle_time === null || supplier_active.mat_cycle_time === ""
+            ? 0
+            : Number(supplier_active.mat_cycle_time.toString().replace(/,/g, "")),
+          remark:
+            supplier_active.remark === null
+              ? 0
+              : Number(supplier_active.remark.toString().replace(/,/g, "")),
+          weight_piece:
+            materailData.weight_piece === null
+              ? 0
+              : Number(materailData.weight_piece.toString().replace(/,/g, "")),
+          minimum_lot:
+            materailData.minimum_lot === null
+              ? 0
+              : Number(materailData.minimum_lot.toString().replace(/,/g, "")),
+          minimum_order_supplier:
+            materailData.minimum_order_supplier === null
+              ? 0
+              : Number(
+                  materailData.minimum_order_supplier
+                    .toString()
+                    .replace(/,/g, "")
+                ),
+          supplier_lead_time:
+            materailData.supplier_lead_time === null
+              ? 0
+              : Number(
+                  materailData.supplier_lead_time.toString().replace(/,/g, "")
+                ),
+          material_supplier_id: supplier_active.id,
+          material_supplier_sort: supplier_active.sort,
+          material_unit_id: materailData.material_unit_id,
+          amount: materailData.amount,
+          weight_piece:
+          materailData.weight_piece === null
+            ? 0
+            : Number(materailData.weight_piece.toString().replace(/,/g, "")),
+          minimum_lot: materailData.minimum_lot === null
+          ? 0
+          : Number(
+              materailData.minimum_lot.toString().replace(/,/g, "")
+            ),
+          minimum_order_supplier: materailData.minimum_order_supplier,
+          supplier_lead_time:
+          materailData.supplier_lead_time === null
+            ? 0
+            : Number(
+                materailData.supplier_lead_time.toString().replace(/,/g, "")
+              ),
+          description: materailData.description,
+          remark: materailData.remark,
+          image: materailData.image,
+          image_name: materailData.image_name,
+          imaget_path: materailData.imaget_path,
+          oem_id: materailData.oem_id,
+          is_active: materailData.is_active,
+          supplier_data:supplier_select_data,
+          coil_weight:
+          materailData.coil_weight === null || materailData.coil_weight ===""|| materailData.coil_weight ===undefined
+            ? 0
+            : Number(
+                materailData.coil_weight.toString().replace(/,/g, "")
+              ),
+        };
+
+        console.log(temp_data);
+
+        axios({
+          method: "post",
+          url: Configs.API_URL + "/material/add",
+          headers: {
+            Authorization: getToken(),
+            "X-TTT": Configs.API_TTT,
+            "Content-Type": "application/json",
+          },
+          data: temp_data,
+        })
+         .then(function (response) {
+              if (response.data) {
+                Swal.fire({
+                  icon: "success",
+                  title: "Save",
+                  showConfirmButton: false,
+                  timer: 1500,
+                }).then((result) => {
+                  window.location.href =
+                  "/Warehouse_Management/Factory_Master_Data/Raw_Materail";
+                });
+              }
+  
+              //console.log(response.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+              Swal.fire("Error", error.response.data.message, "error");
+            });
+         
+      } 
+      if(props.mode === "edit"){
+        const editdata = {
+          id: id,
+          no: materailData.no.trim(),
+          name: materailData.name.trim(),
+          material_type_id: materailData.material_type_id,
+          material_spec_id: materailData.material_spec_id,
+          material_size_id: materailData.material_size_id,
+          material_supplier_id: supplier_active.id,
+          material_supplier_sort: supplier_active.sort,
+          material_unit_id: materailData.material_unit_id,
+          amount: materailData.amount,
+          buy_price:
+            supplier_active.buy_price === null
+              ? 0
+              : Number(supplier_active.buy_price.toString().replace(/,/g, "")),
+          minimum_order:
+            supplier_active.minimum_order === null
+              ? 0
+              : Number(supplier_active.minimum_order.toString().replace(/,/g, "")),
+
+              lead_time_days:
+              supplier_active.lead_time_days === null || supplier_active.lead_time_days === ""
+              ? 0
+              : Number(supplier_active.lead_time_days.toString().replace(/,/g, "")),
+              mat_cycle_time:
+              supplier_active.mat_cycle_time === null || supplier_active.mat_cycle_time === ""
+              ? 0
+              : Number(supplier_active.mat_cycle_time),
+     
+          remark:
+            supplier_active.remark === null
+              ? 0
+              : Number(supplier_active.remark.toString().replace(/,/g, "")),
+          weight_piece:
+            materailData.weight_piece === null
+              ? 0
+              : Number(materailData.weight_piece.toString().replace(/,/g, "")),
+          minimum_lot:
+            materailData.minimum_lot === null
+              ? 0
+              : Number(materailData.minimum_lot.toString().replace(/,/g, "")),
+          minimum_order_supplier:
+            materailData.minimum_order_supplier === null
+              ? 0
+              : Number(
+                  materailData.minimum_order_supplier
+                    .toString()
+                    .replace(/,/g, "")
+                ),
+          supplier_lead_time:
+            materailData.supplier_lead_time === null
+              ? 0
+              : Number(
+                  materailData.supplier_lead_time.toString().replace(/,/g, "")
+                ),
+          description: materailData.description,
+          remark: materailData.remark,
+          image: materailData.image,
+          image_name: materailData.image_name,
+          imaget_path: materailData.imaget_path,
+          oem_id: materailData.oem_id,
+          is_active: materailData.is_active,
+          supplier_data:supplier_select_data,
+          coil_weight:
+          materailData.coil_weight === null || materailData.coil_weight === "" || materailData.coil_weight === undefined
+            ? 0
+            : Number(
+                materailData.coil_weight.toString().replace(/,/g, "")
+              ),
+        };
+      
+        console.log(editdata);
+        
+        axios({
+          method: "post",
+          url: Configs.API_URL + "/material/update",
+          headers: {
+            "X-TTT": Configs.API_TTT,
+            Authorization: getToken(),
+            "Content-Type": "application/json",
+          },
+          data: editdata,
+        })
+        .then(function (response) {
+          if (response.data) {
+            Swal.fire({
+              icon: "success",
+              title: "Save",
+              showConfirmButton: false,
+              timer: 1500,
+            }).then((result) => {
+              window.location.href =
+              "/Warehouse_Management/Factory_Master_Data/Raw_Materail";
+            });
+          }
+
+          //console.log(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+          Swal.fire("Error", error.response.data.message, "error");
+        });
+     
+      } 
+    }
+    
+  }
+
+  function cancleOption(params) {
+    Swal.fire({
+        title: 'Do you want to cancel and leave the changes?',
+        icon:'warning',
+        showCancelButton: true,
+        confirmButtonText: `Yes`,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText:`No`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href =
+          "/Warehouse_Management/Factory_Master_Data/Raw_Materail";
+        }
+      }
+      );
+  }
+
+  const select_supplier = useRef();
+
+  var rowsSupplier = [];
+ 
+  for(var index = 0; index < supplier_select_data.length;index++){
+    //console.log(customer_product_data)
+    const rowItem = {};
+    rowItem["no"] = index + 1 ;
+    let sup_name = supplier.filter((e)=>{
+      return e.id === supplier_select_data[index].supplier_id;
+    })
+    var name = "";
+    if(sup_name.length >  0){
+      name = sup_name[0].name;
+    }
+  
+    rowItem["supplier"] = name;
+    rowItem["buy_price"] = supplier_select_data[index].buy_price;
+    rowItem["minimum_order"] = supplier_select_data[index].minimum_order;
+    rowItem["lead_time_days"] = supplier_select_data[index].lead_time_days;
+    rowItem["mat_cycle_time"] = supplier_select_data[index].mat_cycle_time;
+    rowItem["remark"] = supplier_select_data[index].remark;
+    var max = "";
+    var min = "";
+    var dis = "";
+    if(index === 0){
+      min = "disabled";
+    }
+     if(index === supplier_select_data.length-1){
+      max = "disabled";
+    }
+    var is_active = false;
+    if(supplier_select_data[index].is_active === true){
+      is_active = true;
+    }
+   if(props.mode === "read"){
+    var max = "disabled";
+    var min = "disabled";
+   }
+/*    var date = moment(supplier_date.date).format('DD/MM/yyyy :: HH:mm น.');
+   if(supplier_select_data[index].create_date){ */
+    var date = moment(supplier_select_data[index].create_date).format('DD/MM/yyyy :: HH:mm น.');
+   //}
+   //console.log(supplier_select_data[index].create_date)
+   rowItem["create_date"] = date;
+    rowItem["mgt"] = (
+      <>
+       {is_active === true ? (
+            <>
+             <div className="row">
+            <div className="col-12">
+              <button
+                type="button"
+                disabled={is_active}
+                onClick={setSupplier_active.bind(
+                  this,
+                  supplier_select_data[index].supplier_id,
+                  name,
+                  supplier_select_data[index].buy_price,
+                  supplier_select_data[index].minimum_order,
+                  supplier_select_data[index].lead_time,
+                  supplier_select_data[index].mat_cycle_time,
+                  supplier_select_data[index].remark,
+                  index
+                )}
+                class="btn btn-block btn-success "
+              >
+                ACTIVE
+              </button>
+            </div>
+            </div>
+            </>
+          ) : (
+            <>
+          
+                       <div className="row">
+            <div className="col-12">
+              <button
+                type="button"
+                disabled={is_active}
+                onClick={setSupplier_active.bind(
+                  this,
+                  supplier_select_data[index].supplier_id,
+                  name,
+                  supplier_select_data[index].buy_price,
+                  supplier_select_data[index].minimum_order,
+                  supplier_select_data[index].lead_time_days,
+                  supplier_select_data[index].mat_cycle_time,
+                  supplier_select_data[index].remark,
+                  index
+                )}
+                class="btn btn-block btn-primary "
+              >
+                ACTIVE
+              </button>
+            </div>
+                   </div>
+                   </>
+          )}
+  <hr/>
+  
+   
+         {props.mode === "read" ? (
+            <>
+            </>
+         ) : (
+          <>
+          {is_active === false ? (
+               <>
+                         <div className="row">
+                <div className = "col-6">
+               <a   
+               data-toggle="modal"
+               data-target="#modal-add_supplier_rerationship"
+          
+               onClick={form_supplier.bind(
+                 this,
+                 name,
+                 supplier_select_data[index].buy_price,
+                 supplier_select_data[index].minimum_order || "", 
+                 supplier_select_data[index].lead_time_days || "", 
+                 supplier_select_data[index].mat_cycle_time || "",
+                 supplier_select_data[index].remark || "", 
+                 "edit",
+                 index
+               )}
+               >
+               <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        </div>
+
+            
+                                              <div className = "col-6">
+                                              <i
+                                              id = {index}
+                                                 onClick={Remove_Supplier.bind(
+                                                  this
+                                           
+                                                )}
+                                                className="fa fa-trash  icon-sm"
+                                              ></i>
+                                                </div>
+                                                </div>
+                                                </>
+             ):(
+<></>
+             )}
+          </>
+         )}
+                                             
+                                       
+                                                </>
+    );
+ 
+    rowsSupplier.push(rowItem);
+  }
+
+  const looptabel = [];
+  looptabel.push(
+    {
+      label: "No",
+      field: "no",
+      sort: "asc",
+      width: 50,
+    },
+    {
+      label: "Supplier",
+      field: "supplier",
+      sort: "asc",
+      width: 50,
+    },
+    
+    {
+      label: "Buy Price",
+      field: "buy_price",
+      sort: "asc",
+      width: 50,
+    },
+
+    {
+      label: "Minimum Order",
+      field: "minimum_order",
+      sort: "asc",
+      width: 50,
+    },  
+    {
+      label: "Lead Time (Days)", 
+      field: "lead_time_days",
+      sort: "asc",
+      width: 50,
+    },)
+
+    feature.map((e, i) => {
+        if(e.feature === " Cycle time"){
+        return (
+          looptabel.push(
+          {
+            label: "Cycle time", 
+            field: "mat_cycle_time",
+            sort: "asc",
+            width: 50,
+          },
+          )
+      );
+      
+        }
+    });
+    looptabel.push(
+    {
+      label: "Remark ",
+      field: "remark",
+      sort: "asc",
+      width: 50,
+    },
+    {
+      label: "Date",
+      field: "create_date",
+      sort: "asc",
+      width: 50,
+    },
+    {
+      label: "MGT",
+      field: "mgt",
+      sort: "asc",
+      width: 50,
+    },
+    )
+  const dataSupplier = {
+    columns: looptabel,
+    rows: rowsSupplier,
+  };
+  //console.log(supplier_select)
+  function Add_Suppier(){
+    var tempData = supplier_select_data;
+    //console.log(tempData)
+    setSupplier_select_data([]);
+    let temp = {
+      supplier_id:supplier_select.id,
+      buy_price:supplier_select.buy_price || 0,
+      minimum_order:supplier_select.minimum_order || 0,
+      lead_time_days:supplier_select.lead_time_days || 0,
+      mat_cycle_time:supplier_select.mat_cycle_time || 0,
+      remark:supplier_select.remark,
+      sort:tempData.length+1,
+      is_active:false,
+      create_date:moment(new Date()).format()
+    }
+    console.log(temp)
+
+   /*  let check = tempData.filter((e)=>{
+      return e.supplier_id === temp.supplier_id && e.buy_price === temp.buy_price;
+    });
+    if(check.length > 0){
+      Swal.fire("Error", "This supplier and buy price has aready!!!", "error");
+    }else{ */
+    tempData.push(temp);
+    tempData.sort((a, b) => b.sort - a.sort);
+    //}
+    tempData.sort((a, b) => b.is_active - a.is_active);
+   
+    setSupplier_select_data(tempData);
+    setsupplier_select({...supplier_select,id:"",buy_price:"",minimum_order:"",lead_time_days:"",mat_cycle_time:"",remark:""});
+    supplier_select.id = "";
+    supplier_select.buy_price = "";
+    supplier_select.minimum_order = "";
+    supplier_select.lead_time_days = "";
+    supplier_select.mat_cycle_time = "";
+    supplier_select.remark = "";
+ 
+    select_supplier.current.select.clearValue();
+    console.log(tempData)
+  }
+
+  function Edit_Suppier(){
+    var tempData = supplier_select_data;
+    setSupplier_select_data([]);
+
+  
+    
+    
+    //console.log(tempData[supplier_select.index]);
+    tempData[supplier_select.index].supplier_id = supplier_select.id;
+    tempData[supplier_select.index].buy_price = supplier_select.buy_price || 0;
+    tempData[supplier_select.index].minimum_order = supplier_select.minimum_order || 0;
+    tempData[supplier_select.index].lead_time_days = supplier_select.lead_time_days || 0;
+    tempData[supplier_select.index].mat_cycle_time = supplier_select.mat_cycle_time || 0;
+    tempData[supplier_select.index].remark = supplier_select.remark;
+    //console.log(tempData);
+    setSupplier_select_data(tempData);
+    setsupplier_select({...supplier_select,id:"",supplier:"",buy_price:"",mode:"",index:"",minimum_order:"",lead_time_days:"",mat_cycle_time:"",remark:""});
+    supplier_select.id = "";
+    supplier_select.buy_price = "";
+    supplier_select.minimum_order = "";
+    supplier_select.lead_time_days = "";
+    supplier_select.mat_cycle_time = "";
+    supplier_select.remark = "";
+    select_supplier.current.select.clearValue();
+  }
+  
+  function form_supplier(supplier_name,buy_price,minimum_order,lead_time_days,mat_cycle_time,remark,mode,index){
+    console.log("lead",lead_time_days);
+    
+    let id = supplier.filter((e)=>{
+      return e.name === supplier_name;
+    })
+    setsupplier_select({...supplier_select,id:id[0].id,supplier:supplier_name,buy_price:buy_price,mode:mode,index:index,minimum_order:minimum_order,lead_time_days:lead_time_days,mat_cycle_time:mat_cycle_time,remark:remark});
+  }
+
+
+  function Remove_Supplier(e){
+    var tempData = supplier_select_data;
+    setSupplier_select_data([]);
+    tempData.splice(e.target.id, 1);
+    setSupplier_select_data(tempData);
+    setsupplier_select({...supplier_select,id:"",supplier:"",buy_price:"",mode:"",index:"",minimum_order:"",lead_time_days:"",remark:""});
+    supplier_select.id = "";
+    supplier_select.buy_price = "";
+    supplier_select.minimum_order = "";
+    supplier_select.lead_time_days = "";
+    supplier_select.remark = "";
+    select_supplier.current.select.clearValue();
+  }
+
+
+ /*  function Sort_Supplier(type,index,e){
+    var tempData = supplier_select_data;
+    setSupplier_select_data([]);
+    //console.log("E: ",e," index:",index , " type:",type)
+    if(type === "up"){
+      tempData[index - 1].sort = tempData[index - 1].sort+1;
+      tempData[index].sort = tempData[index].sort-1;
+      
+    }else if(type === "down"){
+      tempData[index + 1].sort = tempData[index + 1].sort-1;
+      tempData[index].sort = tempData[index].sort+1;
+    }
+    tempData.sort((a,b)=>b.sort - a.sort);
+    //console.log(tempData);
+    setSupplier_select_data(tempData);
+    setsupplier_select({...supplier_select,id:"",buy_price:""});
+    supplier_select.id = "";
+    supplier_select.buy_price = "";
+    select_supplier.current.select.clearValue();
+  } */
+
+  function setSupplier_active(supplier_id,supplier_name,buy_price,minimum_order,lead_time_days,mat_cycle_time,remark,index){
+    console.log("lead",lead_time_days)
+    //console.log(supplier_id,supplier_name,buy_price)
+    var tempData = supplier_select_data;
+    setSupplier_select_data([]);
+    for(let i of tempData){
+      i.is_active = false;
+    }
+    tempData[index].is_active = true;
+    tempData.sort((a, b) => b.sort - a.sort);
+    tempData.sort((a, b) => b.is_active - a.is_active);
+    //console.log(tempData)
+    setsupplier_active({...supplier_active,id:supplier_id
+      ,supplier:supplier_name,
+      buy_price:buy_price,
+      minimum_order:minimum_order,
+      lead_time_days:lead_time_days,
+      mat_cycle_time:mat_cycle_time,
+      remark:remark});
+    setSupplier_select_data(tempData);
+  }
+console.log(feature)
+
+
+  return (
+    <div className="wrapper">
+    {/* <Header />
+    <Sidebar menu="warehouse" activemenu="materail" submenu="factmaster" /> */}
+      <div className="content-wrapper">
+        {/* Content Header (Page header) */}
+        <section className="content-header">
+          <div className="container-fluid">
+            <div className="row mb-2">
+              <div className="col-sm-6">
+                <h1>Raw Material{"  "}<a target="_blank"  href = {getAcademy()}><i class='fa fa-info-circle' ></i></a></h1>
+              </div>
+              <div className="col-sm-6">
+                <ol className="breadcrumb float-sm-right">
+                  <li className="breadcrumb-item">
+                    <a href="#">Home</a>
+                  </li>
+                  <li className="breadcrumb-item active">Raw Material</li>
+                  <li className="breadcrumb-item active">{page_mode}</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div className="container-fluid">
+            <div className="row mb-2">
+              {props.mode === "add" || props.mode === "edit" ? (
+    <div className="col-3 col-md-2 col-xl-1">
+                  <button
+                    type="button"
+                    onClick={saveOption}
+                    class="btn btn-block btn-success "
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
+
+<div className="col-3 col-md-2 col-xl-1">
+                <button
+                  type="button"
+                  onClick={cancleOption}
+                  class="btn btn-block btn-danger "
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+          {/* /.container-fluid */}
+        </section>
+        {/* Main content */}
+        <section className="content">
+          {/* Default box */}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">Material {page_mode}</h3>
+              <div className="card-tools"></div>
+            </div>
+            <div className="card-body">
+              <div className="row">
+              <div className="col-12 col-md-6 col-xl-4">
+                  {/* <div className="form-group">
+                    <label htmlFor="">Materail No.</label>{" "}
+                    <input type="text" className="form-control" />
+                  </div> */}
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={materailData.no}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          no: e.target.value,
+                        });
+                      }}
+                      disabled={addRoedit}
+                    />
+                    <label>
+                    Material No.
+                      {materailData.no.trim() === "" ? (
+                        <span style={{ color: "red" }}> *</span>
+                      ) : (
+                        ""
+                      )}
+                    </label>
+                  </div>
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={materailData.name}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          name: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>
+                      Material Name
+                      {materailData.name.trim() === "" ? (
+                        <span style={{ color: "red" }}> *</span>
+                      ) : (
+                        ""
+                      )}
+                    </label>
+                  </div>
+                  <div className="form-group">
+                    <NumberFormat
+                      className="form-control"
+                      required
+                      thousandSeparator={true}
+                      value={materailData.weight_piece}
+                      allowNegative ={false}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          weight_piece: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>
+                      Weight/Piece (Kg)
+                      {materailData.weight_piece === "" ? (
+                        <span style={{ color: "red" }}> *</span>
+                      ) : (
+                        ""
+                      )}
+                    </label>
+                  </div>
+                  
+                </div>
+              
+                <div className="col-12 col-md-4 col-xl-3">
+                  <label htmlFor="exampleInputFile"> </label>
+                  <img
+                    id="img"
+                    alt="..."
+                    className="img-fluid rounded shadow border-0"
+                    src={
+                      materailData.imaget_path !== "" &&
+                      materailData.imaget_path !== null &&
+                      materailData.imaget_path !== undefined
+                        ? Configs.API_URL_IMG + materailData.imaget_path
+                        : userdefault_img.imgs
+                    }
+                    style={{
+                      width: "300px",
+                      height: "200px",
+                      position: "relative",
+                    }}
+                  />
+                  <br/>
+                  <span style={{ color: "red", fontSize: "12px" }}>
+                    Recommend Size:400x300px{" "}
+                  </span>
+                  
+                </div>
+              </div>
+              <div className="row-12 row-md-2 row-xl-1" >
+                </div>
+           {/*    <br/><br/><br/><br/><br/><br/><br/> */}
+          
+              <div className="row">
+                {feature.map((e)=>{
+                  if(e.feature === "Mat Type"){
+                    return(
+                      <div className="col-12 col-md-6 col-xl-4">
+                  <div class="form-group">
+                    <select
+                      className="custom-select"
+                      value={materailData.material_type_id}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_type_id: e.target.value,
+                        });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Select Type
+                      </option>
+                      {type.map((el) => {
+                        return (
+                          <option key={el.id} value={el.id}>
+                            {el.name}{" "}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label>
+                      Mat. Type
+                 
+                    </label>
+                  </div>
+                </div>
+                    );
+                  }
+                  if(e.feature === "Mat Spec"){
+                    return(
+                      <div className="col-12 col-md-6 col-xl-4">
+                  <div class="form-group">
+                    <select
+                      className="custom-select"
+                      value={materailData.material_spec_id}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_spec_id: e.target.value,
+                        });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Select Spec
+                      </option>
+                      {spect.map((el) => {
+                        return (
+                          <option key={el.id} value={el.id}>
+                            {el.name}{" "}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label>
+                      Mat. Spec
+                     
+                    </label>
+                  </div>
+                </div>
+                    );
+                  }
+                  if(e.feature === "Mat Size"){
+                    return(
+                      <div className="col-12 col-md-6 col-xl-4">
+                  <div class="form-group">
+                    <select
+                      className="custom-select"
+                      value={materailData.material_size_id}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_size_id: e.target.value,
+                        });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Select Size
+                      </option>
+                      {size.map((el) => {
+                        return (
+                          <option key={el.id} value={el.id}>
+                            {el.name}{" "}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label>
+                      Mat. Size
+                      
+                    </label>
+                  </div>
+                </div>
+                    );
+                  }
+                  if(e.feature === "Coil Weigh"){
+                    return(
+                  <div className="col-12 col-md-6 col-xl-4">
+                      <div className="form-group">
+                      <NumberFormat
+                          className="form-control"
+                          required
+                          thousandSeparator={true}
+                          allowNegative ={false}
+                          value={materailData.coil_weight}
+                          disabled={addRoedit}
+                          onChange={(e) => {
+                            setmaterailData({
+                              ...materailData,
+                              coil_weight: e.target.value,
+                            });
+                          }}
+                        />
+    
+                        <label>Coil Weight</label>
+                        
+                      </div>
+                    </div>
+                       );
+                      }
+
+                  if(e.feature === "Mat Grade"){
+                    return(
+                      <div className="col-12 col-md-6 col-xl-4">
+                  <div class="form-group">
+                    <select
+                      className="custom-select"
+                      value={materailData.material_spec_id}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_spec_id: e.target.value,
+                        });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Select Grade
+                      </option>
+                      {spect.map((el) => {
+                        return (
+                          <option key={el.id} value={el.id}>
+                            {el.name}{" "}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label>
+                      Mat. Grade
+                     
+                    </label>
+                  </div>
+                </div>
+                    );
+                  }
+                })}
+                
+                
+                
+                
+              </div>
+              <div className="row">
+             {/*    <div className="col-md-2 col-lg-2 col-sm-2">
+                  <div className="form-group">
+                    <NumberFormat
+                      className="form-control"
+                      required
+                      thousandSeparator={true}
+                      allowNegative ={false}
+                      value={materailData.buy_price}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          buy_price: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>
+                      Buy Price
+                      {materailData.buy_price === "" ? (
+                        <span style={{ color: "red" }}> *</span>
+                      ) : (
+                        ""
+                      )}
+                    </label>
+                  </div>
+                </div> */}
+
+              
+
+              {/*   <div className="col-md-2 col-lg-2 col-sm-2">
+                  <div class="form-group">
+                    <select
+                      className="custom-select"
+                      value={materailData.material_supplier_id}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_supplier_id: e.target.value,
+                        });
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Select Suplier
+                      </option>
+                      {supplier.map((el) => {
+                        return (
+                          <option key={el.id} value={el.id}>
+                            {el.name}{" "}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label>
+                      Supplier
+                      {materailData.material_supplier_id === "" ? (
+                        <span style={{ color: "red" }}> *</span>
+                      ) : (
+                        ""
+                      )}
+                    </label>
+                  </div>
+                </div>
+ */}
+
+                {feature.map((e)=>{
+                  if(e.feature === "INPUT Supplier Lead Time (Day)"){
+                    return(
+                      <div className="col-12 col-md-6 col-xl-4">
+                      <div class="form-group">
+                    
+                        <NumberFormat
+                          className="form-control"
+                          required
+                          allowNegative ={false}
+                          thousandSeparator={false}
+                          value={materailData.supplier_lead_time}
+                          disabled={addRoedit}
+                          onChange={(e) => {
+                            setmaterailData({
+                              ...materailData,
+                              supplier_lead_time: e.target.value,
+                            });
+                          }}
+                        />
+    
+                        <label>Supplier Lead Time{"(Day)"}</label>
+                      </div>
+                    </div>
+                    );
+
+                    
+                  }
+                })}
+              
+              <div className="col-12 col-md-6 col-xl-4"></div>
+                
+              </div>
+              <div className="row">
+              <div className="col-12 col-md-6 col-xl-4">
+                  <label htmlFor="exampleInputFile">Part Image</label>
+                  <span style = {{color:"red"}}> size(400 x 300) px</span>
+                  <div className="input-group">
+                  
+                    <div className="custom-file">
+                      
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="exampleInputFile"
+                        disabled={addRoedit}
+                        accept="image/*"
+                        onChange={setproductLogo}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="exampleInputFile"
+                      >
+                        {materailData.image_name !== ""
+                          ? materailData.image_name
+                          : "Select Image"}
+                      </label>
+                      
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+
+              <br />
+              <div className="row">
+              <div className="row-12 row-md-2 row-xl-1" >
+                  
+                  <label>Mat. Unit</label>
+                  {materailData.material_unit_id === "" ? (
+                    <span style={{ color: "red" }}> *</span>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="col-12 col-md-3 col-xl-2">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="radio1"
+                      id= "weight"
+                      value="6fac9f35-9749-476d-a24a-4c33061e59b7"
+                      disabled={addRoedit}
+                      checked={
+                        materailData.material_unit_id ===
+                        "6fac9f35-9749-476d-a24a-4c33061e59b7"
+                          ? true
+                          : false
+                      }
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_unit_id: e.target.value,
+                        });
+                      }}
+                    />
+                    <label className="form-check-label" for = "weight">By Weight(kg)</label>
+                  </div>
+                </div>
+                <div className="col-12 col-md-3 col-xl-2">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="radio1"
+                      id="piece"
+                      value="505a84a4-6c71-4fbf-9dbd-8c63644221f5"
+                      disabled={addRoedit}
+                      checked={
+                        materailData.material_unit_id ===
+                        "505a84a4-6c71-4fbf-9dbd-8c63644221f5"
+                          ? true
+                          : false
+                      }
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          material_unit_id: e.target.value,
+                        });
+                      }}
+                    />
+                    <label className="form-check-label" for = "piece">By Piece</label>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+              <div className="col-12 col-md-6 col-xl-4">
+                  <div className="form-group">
+                  <NumberFormat
+                      className="form-control"
+                      required
+                      thousandSeparator={true}
+                      allowNegative ={false}
+                      value={materailData.minimum_lot}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          minimum_lot: e.target.value,
+                        });
+                      }}
+                    />
+
+                    <label>Minimum Stock</label>
+                    
+                  </div>
+                </div>
+                {feature.map((e)=>{
+                  if(e.feature === "INPUT Minimum Order Supplier"){
+                    return(
+                      <div className="col-12 col-md-6 col-xl-4">
+                  <div className="form-group">
+                
+                  <NumberFormat
+                      className="form-control"
+                      required
+                      thousandSeparator={true}
+                      allowNegative ={false}
+                      value={materailData.minimum_order_supplier}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          minimum_order_supplier: e.target.value,
+                        });
+                      }}
+                    />
+
+                    <label>Minimum Order Supplier</label>
+
+
+                  </div>
+                </div>
+                    );
+                  }
+                  })}
+              </div>
+              <div className="row">
+              <div className="col-12 col-md-6 col-xl-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={materailData.description}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          description: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>Material Description</label>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+              <div className="col-12 col-md-6 col-xl-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={materailData.remark}
+                      disabled={addRoedit}
+                      onChange={(e) => {
+                        setmaterailData({
+                          ...materailData,
+                          remark: e.target.value,
+                        });
+                      }}
+                    />
+                    <label>Remark</label>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+              <div className="row">
+
+              
+            {/*   <div className="col-md-2 col-lg-2 col-sm-2">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={supplier_active.supplier}
+                      disabled={true}
+                    
+                    />
+                    <label>Supplier</label>
+                  </div>
+                </div>
+
+                <div className="col-md-2 col-lg-2 col-sm-2">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={supplier_active.buy_price}
+                      disabled={true}
+                     
+                    />
+                    <label>Buy Price</label>
+                  </div>
+                </div>
+
+
+                <div className="col-md-2 col-lg-2 col-sm-2">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={supplier_active.lead_time_days}
+                      disabled={true}
+                     
+                    />
+                    <label>Lead_Time (Days)</label>
+                  </div>
+                </div>
+
+                <div className="col-md-2 col-lg-2 col-sm-2">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
+                      value={supplier_active.remark}
+                      disabled={true}
+                     
+                    />
+                    <label>Remark</label>
+                  </div>
+                </div> */}
+     
+
+
+
+
+
+
+     <div className="col-12 col-md-4 col-xl-3">
+                  <div class="form-group">
+                  <button
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#modal-add_supplier_rerationship"
+                    //onClick={saveOption}
+                    class="btn btn-block btn-primary "
+                    onClick={()=>{
+                      setsupplier_select({
+                        ...supplier_select,id:"",
+                        supplier:"",
+                        buy_price:"",
+                        mode:"add",
+                        index:"",
+                        minimum_order:"",
+                        lead_time_days:"",
+                        remark:"",
+                      });
+                    }}
+                  >
+                    Add Relationship Supplier&nbsp;
+                    <span>
+                    <i className="fa fa-plus-circle"></i>
+                    </span>
+                  </button>
+                  
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+               
+               <div className="col-12">
+             
+    
+               <div className="table-responsive" style={{ whiteSpace: 'nowrap' }} /*  style={{ height: "600px" }} */ >
+               <MDBDataTable
+               sortable = {false}
+                  className="table table-head-fixed"
+                  disableRetreatAfterSorting={true}
+                  striped
+                  bordered
+                  hover
+                  fixedHeader
+                  data={dataSupplier}
+                />
+                
+                            
+                          
+                </div> 
+                  </div>
+       
+
+            
+          
+             
+            </div>
+
+
+
+
+
+
+
+
+              <div className="modal fade" id="modal-add_supplier_rerationship">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-label">Add Supplier Rerationship</h4>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col-1"></div>
+                <div className="col-10">
+                
+                  <div className="form-group">
+                  <Select
+                          options={supplier_option}
+                          ref = {select_supplier}
+                          value={supplier_option.filter((e)=>{
+                            return e.label === supplier_select.supplier
+                          })}
+                          onChange={(e) => {
+                            //console.log(e);
+                            if(e !== null){
+                              setsupplier_select({
+                              ...supplier_select,
+                              id: e.id_supplier || "",
+                              supplier: e.label || "",
+                            });
+                            }
+                           
+                          }}
+                        />  
+                 
+                
+                    <label htmlFor="">Supplier :</label>
+                  </div>
+                </div>
+                <div className="col-1"></div>
+              </div>
+             
+              <div className="row">
+              <div className="col-1"></div>
+              <div className="col-10">
+                  <div className="form-group">
+                  <NumberFormat
+                      allowNegative={false}
+                      type="text"
+                      className="form-control"
+         
+                      value={supplier_select.buy_price}
+                      onChange={(e) =>
+                        setsupplier_select({ ...supplier_select, buy_price: e.target.value })
+                      }
+                      required
+                    />
+                   
+                    <label htmlFor="">Buy Price :</label>
+                  </div>
+                </div>
+                <div className="col-1"></div>
+                </div>
+
+              <div className="row">
+              <div className="col-1"></div>
+              <div className="col-10">
+                  <div className="form-group">
+                  <NumberFormat
+                      allowNegative={false}
+                      type="text"
+                      className="form-control"
+         
+                      value={supplier_select.minimum_order}
+                      onChange={(e) =>
+                        setsupplier_select({ ...supplier_select, minimum_order: e.target.value })
+                      }
+                      required
+                    />
+                   
+                    <label htmlFor="">Minimum Order :</label>
+                  </div>
+                </div>
+                <div className="col-1"></div>
+                </div>
+
+
+                <div className="row">
+              <div className="col-1"></div>
+              <div className="col-10">
+                  <div className="form-group">
+                  <NumberFormat
+                      allowNegative={false}
+                      type="text"
+                      className="form-control"
+                      thousandSeparator={false}
+                      value={supplier_select.lead_time_days}
+                      onChange={(e) =>
+                        setsupplier_select({ ...supplier_select, lead_time_days: e.target.value })
+                      }
+                      required
+                    />
+                   
+                    <label htmlFor="">Lead Time (Days) :</label>
+                  </div>
+                </div>
+                <div className="col-1"></div>
+                </div>
+
+
+                {feature.map((e)=>{
+                  if(e.feature === " Cycle time"){
+                    return(
+                      <div className="row">
+                      <div className="col-1"></div>
+                      <div className="col-10">
+                          <div className="form-group">
+                          <NumberFormat
+                              allowNegative={false}
+                              decimalSeparator= {false}
+                              type="text"
+                              className="form-control"
+                              value={supplier_select.mat_cycle_time}
+                              onChange={(e) =>
+                                setsupplier_select({ ...supplier_select, mat_cycle_time: e.target.value })
+                              }
+                              required
+                            />
+                           
+                            <label htmlFor="">Cycle time :</label>
+                          </div>
+                        </div>
+                        <div className="col-1"></div>
+                        </div>
+                    );
+
+                    
+                  }
+                })}
+
+                <div className="row">
+              <div className="col-1"></div>
+              <div className="col-10">
+                  <div className="form-group">
+                  <input
+                      allowNegative={false}
+                      type="text"
+                      className="form-control"
+         
+                      value={supplier_select.remark}
+                      onChange={(e) =>
+                        setsupplier_select({ ...supplier_select, remark: e.target.value })
+                      }
+                      required
+                    />
+                   
+                    <label htmlFor="">Remark :</label>
+                  </div>
+                </div>
+                <div className="col-1"></div>
+                </div>
+
+              
+
+              
+               
+              <div className="row">
+                <div className="col-1"></div>
+                
+                <div className="col-1"></div>
+              </div>
+            </div>
+            <div className="modal-footer justify-content-between">
+            
+                  {supplier_select.mode === "edit" ? (
+                    <>
+                     <button
+                     disabled={supplier_select.id === "" || supplier_select.buy_price === "" ? true : false}
+                    type="button"
+                    onClick={Edit_Suppier}
+                    data-dismiss="modal"
+                    className="btn btn-primary" 
+                  >
+                    Save Change
+                  </button>
+                  
+                    </>
+                  ) : (
+                    <>
+                    <button
+                      disabled={supplier_select.id === "" || supplier_select.buy_price === "" ? true : false}
+                    type="button"
+                    onClick={Add_Suppier}
+                    data-dismiss="modal"
+                    className="btn btn-primary"
+                  >
+                    Add
+                  </button>
+                  
+                  </>
+                  )}
+                     
+              <button
+                type="button"
+                className="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+          
+             
+            </div>
+          </div>
+         
+        </div>
+       
+      </div>
+
+
+
+
+
+
+
+            </div>
+            {/* /.card-body */}
+          </div>
+          {/* /.card */}
+        </section>
+        {/* /.content */}
+      </div>
+     {/*  <Footter/> */}
+      </div>
+  );
+}
+export default Materail_add;
